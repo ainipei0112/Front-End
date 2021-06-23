@@ -2,16 +2,19 @@ import {
   Box,
   Button,
   Card,
-  CardContent,
   TextField,
-  InputAdornment,
-  SvgIcon
+  Typography
 } from '@material-ui/core';
-import { Search as SearchIcon } from 'react-feather';
+import { Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AppContext } from 'src/Context';
 
 const SalesorderListToolbar = (props) => {
   const navigate = useNavigate();
+  const {
+    searchoneOrder
+  } = useContext(AppContext);
   function addsalesorder(e) {
     e.preventDefault();
     console.log('The link was clicked.');
@@ -45,29 +48,91 @@ const SalesorderListToolbar = (props) => {
           Add salesorder
         </Button>
       </Box>
-      <Box sx={{ mt: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          paddingTop: '30px'
+        }}
+      >
         <Card>
-          <CardContent>
-            <Box sx={{ maxWidth: 500 }}>
-              <TextField
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon
-                        fontSize="small"
-                        color="action"
-                      >
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
-                placeholder="Search salesorder"
-                variant="outlined"
-              />
-            </Box>
-          </CardContent>
+          <Box sx={{ minWidth: 300 }}>
+            <Formik
+              initialValues={{
+                custid: '',
+                date1: '',
+                date2: ''
+              }}
+              onSubmit={(value) => {
+                console.log(value);
+                searchoneOrder(value);
+              }}
+            >
+              {({
+                handleBlur,
+                handleChange,
+                handleSubmit,
+                values
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <Box
+                    sx={{
+                      pb: 1,
+                      pt: 3
+                    }}
+                  >
+                    <Typography
+                      align="center"
+                      color="textSecondary"
+                      variant="body1"
+                    >
+                      客戶訂單查詢
+                    </Typography>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <TextField
+                      margin="normal"
+                      name="custid"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="string"
+                      value={values.custid}
+                      variant="outlined"
+                    />
+                  </Box>
+                  <TextField
+                    margin="normal"
+                    name="date1"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="date"
+                    value={values.date1}
+                    variant="outlined"
+                  />
+                  <TextField
+                    margin="normal"
+                    name="date2"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="date"
+                    value={values.date2}
+                    variant="outlined"
+                  />
+                  <Box sx={{ py: 2 }}>
+                    <Button
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                    >
+                      送出
+                    </Button>
+                  </Box>
+                </form>
+              )}
+            </Formik>
+          </Box>
         </Card>
       </Box>
     </Box>

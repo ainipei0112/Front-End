@@ -490,6 +490,27 @@ fetch("http://localhost/php-react/showsalesdetail.php", {
     setProduct(products);
   };
 
+  const searchoneOrder = (value) => {
+    fetch('http://localhost/php-react/search-oneorder.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setsalesorders(data.order);
+        } else {
+          alert(data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return {
     users,
     orderdetile,
@@ -516,6 +537,7 @@ fetch("http://localhost/php-react/showsalesdetail.php", {
     updatesalesorder,
     insertsalesorder,
     userLength,
+    searchoneOrder,
   };
 };
 

@@ -1,59 +1,4 @@
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import {
-  Box,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Button,
-  TextField
-} from '@material-ui/core';
-import { useContext, useState } from 'react';
-import { AppContext } from 'src/Context';
-
-const ProductListResults = () => {
-  const [newData, setNewData] = useState({});
-  const {
-    products,
-    deleteProduct,
-    editProductMode,
-    updateProduct,
-    cancelEditProduct
-  } = useContext(AppContext);
-
-  const updateNewData = (e, field) => {
-    setNewData({
-      ...newData,
-      [field]: e.target.value,
-    });
-  };
-
-  const enableEdit = (productid, productname, productprice, productcost) => {
-    setNewData({
-      productid,
-      productname,
-      productprice,
-      productcost
-    });
-    editProductMode(productid);
-  };
-
-  const deleteConfirm = (productid) => {
-    if (window.confirm('Are you sure?')) {
-      deleteProduct(productid);
-    }
-  };
-
-  const saveBtn = () => {
-    console.log(newData);
-    updateProduct(newData);
-  };
-
-  return (
-    <Card>
-      <PerfectScrollbar>
+<Card>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
             <TableHead>
@@ -73,20 +18,13 @@ const ProductListResults = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              { products.map(
-                (
-                  {
-                    productid, productname, productprice, productcost, isEditing
-                  }
-                ) => {
-                  return isEditing === true ? (
                     <TableRow rowkey={productid}>
                       <TableCell>
                         <TextField
                           placeholder={productid}
                           margin="normal"
                           name="productid"
-                          onChange={(e) => updateNewData(e, 'productid2')}
+                          onChange={(e) => updateNewData(e, 'productid')}
                           type="string"
                           variant="outlined"
                         />
@@ -142,39 +80,7 @@ const ProductListResults = () => {
                         Cancel
                       </Button>
                     </TableRow>
-                  ) : (
-                    <TableRow rowkey={productid}>
-                      <TableCell>
-                        {productid}
-                      </TableCell>
-                      <TableCell>
-                        {productname}
-                      </TableCell>
-                      <TableCell>
-                        {productprice}
-                      </TableCell>
-                      <TableCell>
-                        {productcost}
-                      </TableCell>
-                      <Button
-                        onClick={() => deleteConfirm(productid)}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        onClick={() => enableEdit(productid, productname, productprice, productcost)}
-                      >
-                        Edit
-                      </Button>
-                    </TableRow>
-                  );
-                }
-              )}
             </TableBody>
           </Table>
         </Box>
-      </PerfectScrollbar>
-    </Card>);
-};
-
-export default ProductListResults;
+    </Card>
